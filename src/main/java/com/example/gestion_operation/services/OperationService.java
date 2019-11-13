@@ -19,11 +19,29 @@ public class OperationService {
     public List<Operation> getOperation() {
         return operationRepository.findAll();
     }
+
     public Operation updateOperation(int id, Operation newOperation) {
-        return new Operation();
+        if (operationRepository.findById(id).isPresent()) {
+			Operation existingOperation = operationRepository.findById(id).get();
+            existingOperation.setDate_operation(newOperation.getDate_operation());
+            existingOperation.setDoctorId(newOperation.getDoctorId());
+            existingOperation.setNom_operation(newOperation.getNom_operation());
+            existingOperation.setPatientId(newOperation.getPatientId());
+            existingOperation.setRoomId(newOperation.getRoomId());
+			return operationRepository.save(existingOperation);
+		} else {
+			return null;
+		}
     }
 
     public Boolean deleteOperation(int id) {
-        return true;
+        if (operationRepository.findById(id).isPresent()) {
+            operationRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+
+
     }
 }
